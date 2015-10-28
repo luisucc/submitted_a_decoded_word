@@ -19,6 +19,14 @@ objet_interaction = InteractServer.new
 
 word = objet_interaction.get_word(word_url)
 
-puts "Challenge by decoded the word = #{word}"
+puts "Challenge one: by decoded the word = #{word}"
 
 puts "Is solved?: #{objet_interaction.send_word(answer_url, word)}"
+
+word = objet_interaction.get_word(word_url)
+
+puts "Challenge two: by decoded the word = #{word}"
+
+decoding_word = word.reverse
+
+puts "Is solved?: #{objet_interaction.send_word(answer_url, decoding_word)}"

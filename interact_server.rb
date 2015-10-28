@@ -20,5 +20,8 @@ class InteractServer
     talk_to_the_server(URI.parse(answer_url+word))
   end
 
+
+
+
 end
 
