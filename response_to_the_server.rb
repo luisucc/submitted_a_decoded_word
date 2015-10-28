@@ -30,3 +30,11 @@ puts "Challenge two: by decoded the word = #{word}"
 decoding_word = word.reverse
 
 puts "Is solved?: #{objet_interaction.send_word(answer_url, decoding_word)}"
+
+word = objet_interaction.get_word(word_url)
+
+puts "Challenge three: by decoded the word = #{word}"
+
+decoding_word = word.gsub(/[13406]/, '1' => 'i', '3' => 'e', '4' => 'a', '0' => 'o', '6' => 'u')
+
+puts "Is solved?: #{objet_interaction.send_word(answer_url, decoding_word)}"
