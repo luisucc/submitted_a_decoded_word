@@ -16,11 +16,18 @@ puts "\n"
 
 interactor = InteractServer.new
 
-challenges = [1,2,3,4]
+challenges = [1,2,3,4,5,7,8]
 
 challenges.each do |challenge|
-  puts "The challenge #{challenge} is:"
   word = interactor.call_to_the_url(url_to_get_word)
+
+  if word == "YOU HAVE FINISHED!"
+    puts "YOU HAVE FINISHED!"
+    break
+  end
+
+  puts "The challenge #{challenge} is:"
+
   case challenge
   when 1
     decoded_word = word
@@ -28,7 +35,6 @@ challenges.each do |challenge|
     decoded_word = word.reverse
   when 3
     decoded_word = word.gsub(/[13406]/, '1' => 'i', '3' => 'e', '4' => 'a', '0' => 'o', '6' => 'u')
-    # binding.pry
   when 4
     word_to_char = word.chars
     word_length = word.length
@@ -37,15 +43,34 @@ challenges.each do |challenge|
     z = a << b
     decoded_word = z.join
   when 5
-    # create this code
-    # number_of_asterisks = word.count('*')
-    # a = 'aeiou'.chars
+    # binding.pry
+    number_of_asterisks = word.count('*')
+    vowels = 'aeiou'.chars
 
-    # word.sub('*', a.sample(1).join).sub('*', a.sample(1).join).sub('*', a.sample(1).join).sub('*', a.sample(1).join).sub('*', a.sample(1).join)
+    posibilities = vowels.repeated_permutation(number_of_asterisks).to_a
+
+    posibilities.each do |posibility|
+      i = 0
+      numbers = ("1".."#{number_of_asterisks}").to_a.map!{|x| x.to_i}.join
+      word_with_numbers = word.chars.map! {|letter|  letter == "*" ? i = 1 + i : letter }.join
+      decoded_word = word_with_numbers.tr("#{numbers}", "#{posibility.join}")
+      response = interactor.call_to_the_url(url_to_send_answer, decoded_word)
+      if response == "OK! - You have succesfully completed this challenge, please ask for another word to see the next challenge"
+        break
+      end
+    end
+  when 6
+    # not working on server
+  when 7
+    alphabet = ('a'..'z').to_a
+    decoded_word = word.gsub(/[#{alphabet}]/, '').gsub(/[13406]/, '1' => 'i', '3' => 'e', '4' => 'a', '0' => 'o', '6' => 'u').downcase
+  when 8
+    puts "YOU HAVE FINISHED!"
+    break
   else
     puts "no challenge configured"
   end
-  puts "#{word} => #{decoded_word}"
+  puts "word: #{word} => decoded word: #{decoded_word}"
   response = interactor.call_to_the_url(url_to_send_answer, decoded_word)
   puts "#{response}"
 end
